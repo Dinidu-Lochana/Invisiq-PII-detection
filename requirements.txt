@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+spacy
+presidio-analyzer
+transformers
+torch
+aiofiles
+pydantic
