@@ -2,17 +2,10 @@ from transformers import pipeline
 from models.pii_model import PIIEntity
 
 # Load Hugging Face NER model
-nlp = pipeline("ner", model="dslim/bert-base-NER", aggregation_strategy="simple")
-
-# PIIs
-PII_LABELS = {"PER", "ORG", "LOC"}
+nlp = pipeline("ner", model="dslim/bert-large-NER", aggregation_strategy="simple")
 
 async def deberta_detector(text: str):
     entities = nlp(text)
-
-    # Filter out only PII entities
-    filtered_entities = [ent for ent in entities if ent["entity_group"] in PII_LABELS]
-
     results = [
         PIIEntity(
             type=ent["entity_group"],
@@ -22,6 +15,6 @@ async def deberta_detector(text: str):
             score=ent["score"],
             source="deberta"
         )
-        for ent in filtered_entities
+        for ent in entities
     ]
     return results
